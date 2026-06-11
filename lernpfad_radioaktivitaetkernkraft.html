@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>⚛️ Lernpfad Radioaktivität – Physik 4. Klasse</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f1f5f9;min-height:100vh;color:#1e293b}
+button,input{font-family:inherit;cursor:pointer}
+
+/* ── INTRO ── */
+.intro-wrap{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);display:flex;align-items:center;justify-content:center;padding:20px}
+.intro-card{background:#fff;border-radius:18px;padding:36px 32px;max-width:540px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.4)}
+.field-label{display:block;font-weight:700;color:#374151;margin-bottom:6px;font-size:14px}
+input[type=text]{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:9px;font-size:15px;outline:none;transition:border .2s}
+input[type=text]:focus{border-color:#3b82f6}
+.lvl-opt{padding:13px 16px;border:2px solid #e2e8f0;border-radius:10px;margin-bottom:8px;cursor:pointer;background:#fafafa;transition:all .15s;display:flex;align-items:center;gap:12px;user-select:none}
+.lvl-radio{width:20px;height:20px;border-radius:50%;border:2px solid #d1d5db;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.btn-start{width:100%;padding:14px;background:#1e3a5f;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:800;margin-top:4px;transition:background .2s}
+.btn-start:disabled{background:#94a3b8;cursor:not-allowed}
+
+/* ── TOP BAR ── */
+#topbar{background:#1e3a5f;color:#fff;padding:10px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.tb-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.lvl-badge{padding:2px 10px;border-radius:20px;font-size:12px;font-weight:800;color:#fff}
+.pb-wrap{width:90px;height:5px;background:rgba(255,255,255,.2);border-radius:3px}
+.pb-fill{height:100%;border-radius:3px;transition:width .4s}
+
+/* ── STATION TABS ── */
+#st-tabs{max-width:920px;margin:14px auto 0;padding:0 14px;display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.tab{padding:7px 13px;border:2px solid #e2e8f0;border-radius:8px;background:#fff;color:#374151;font-size:12px;font-weight:700;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.tab.active{background:#1e3a5f;border-color:#1e3a5f;color:#fff}
+.tab.all-done{background:#dcfce7;border-color:#86efac;color:#15803d}
+
+/* ── MAIN ── */
+.main{max-width:920px;margin:14px auto;padding:0 14px 40px}
+.sc{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;display:none}
+.sc.active{display:block}
+
+/* ── STATION HEADER ── */
+.sh{background:linear-gradient(135deg,#1e3a5f,#2d5a8e);padding:20px 24px;color:#fff}
+.sh-emoji{font-size:36px;margin-bottom:4px}
+.sh-title{font-size:20px;font-weight:900;margin:0}
+.sh-sub{font-size:13px;opacity:.75;margin-top:3px}
+.done-badge{margin-top:10px;padding:5px 14px;background:rgba(34,197,94,.2);border:1px solid rgba(134,239,172,.5);border-radius:20px;display:inline-block;font-size:13px;font-weight:700}
+
+/* ── VIDEO CARD ── */
+.video-card{background:#1e293b;border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.video-thumb{width:48px;height:48px;background:#ef4444;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.video-info{flex:1;min-width:160px}
+.video-title{color:#fff;font-size:13px;font-weight:700;margin-bottom:3px}
+.video-sub{color:#94a3b8;font-size:11px}
+.video-btn{padding:7px 16px;background:#ef4444;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;display:inline-block;flex-shrink:0;transition:background .15s}
+.video-btn:hover{background:#dc2626}
+
+/* ── INFO BOXES ── */
+.info-box{border-radius:10px;padding:13px 16px;margin-bottom:13px;border:1px solid}
+.alt-box{background:#fffbeb;border-color:#fde68a}
+.alt-box .bt{color:#92400e;font-weight:700;font-size:13px;margin-bottom:4px}
+.alt-box p{color:#78350f;font-size:13px;line-height:1.65}
+.lz-box .bt{font-weight:700;font-size:13px;margin-bottom:3px}
+.lz-box p{font-size:13px}
+.sb{padding:20px 24px}
+
+/* ── TASK CARDS ── */
+.tc{border:2px solid #e2e8f0;border-radius:10px;margin-bottom:14px;background:#fff;transition:border .2s,background .2s}
+.tc-inner{padding:15px 18px}
+.tc-row{display:flex;gap:12px;align-items:flex-start}
+.chk{width:26px;height:26px;border:2px solid #d1d5db;border-radius:6px;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;cursor:pointer;user-select:none}
+.chk-mark{color:#fff;font-size:15px;font-weight:800;display:none}
+.tn{font-weight:800;font-size:13px}
+.tbadge{margin-left:7px;font-size:11px;padding:1px 7px;border-radius:20px;font-weight:700;border:1px solid}
+.tt{margin:5px 0 10px;color:#374151;font-size:14px;line-height:1.65;white-space:pre-line}
+
+/* ── MC QUESTIONS ── */
+.mc-box{margin:10px 0;padding:12px 14px;background:#f8fafc;border-radius:9px;border:1px solid #e2e8f0}
+.mc-q{font-size:13px;font-weight:700;color:#1e3a5f;margin-bottom:9px}
+.mc-opts{display:flex;flex-direction:column;gap:6px}
+.mc-opt{padding:8px 13px;border:2px solid #e2e8f0;border-radius:8px;background:#fff;font-size:13px;text-align:left;transition:all .15s;cursor:pointer}
+.mc-opt:hover:not(:disabled){border-color:#93c5fd;background:#eff6ff}
+.mc-opt.correct{border-color:#86efac;background:#dcfce7;color:#15803d;font-weight:700;cursor:default}
+.mc-opt.wrong{border-color:#fca5a5;background:#fef2f2;color:#b91c1c;cursor:default}
+.mc-opt.neutral{border-color:#e2e8f0;background:#fff;cursor:pointer}
+.mc-fb{font-size:12px;font-weight:700;margin-top:8px;padding:6px 10px;border-radius:6px;display:none}
+.mc-fb.correct{background:#dcfce7;color:#15803d;border:1px solid #86efac;display:block}
+.mc-fb.wrong{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;display:block}
+
+/* ── HINT / SOL ── */
+.t-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn-hint,.btn-sol{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid;transition:all .15s;min-height:32px}
+.btn-hint{border-color:#fbbf24;background:#fff;color:#92400e}
+.btn-hint.open{background:#fef3c7}
+.btn-sol{border-color:#93c5fd;background:#fff;color:#1e40af}
+.btn-sol.open{background:#eff6ff}
+.hint-box,.sol-box{margin-top:10px;margin-left:38px;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.6;display:none}
+.hint-box{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.sol-box{background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.hint-box.open,.sol-box.open{display:block}
+
+/* ── NAV ── */
+.nav-btns{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0}
+.btn-nav{padding:10px 20px;border:2px solid #e2e8f0;border-radius:8px;background:#fff;color:#374151;font-weight:700;font-size:14px}
+.btn-nav:disabled{color:#94a3b8;background:#f8fafc;cursor:not-allowed}
+.btn-navp{padding:10px 22px;background:#1e3a5f;color:#fff;border:none;border-radius:8px;font-weight:800;font-size:14px}
+.completion-box{margin-top:20px;padding:18px;background:linear-gradient(135deg,#dcfce7,#d1fae5);border:2px solid #86efac;border-radius:12px;text-align:center}
+.footer{text-align:center;font-size:12px;color:#94a3b8;margin-top:14px;padding-bottom:10px}
+
+@media(max-width:600px){.intro-card{padding:24px 18px}.sh,.sb{padding:15px 16px}.hint-box,.sol-box{margin-left:0}}
+@media print{#topbar,#st-tabs,.nav-btns,.footer{display:none!important}body{background:#fff}.sc{display:block!important;box-shadow:none;margin-bottom:20px;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// NIVEAU-KONFIGURATION
+// ═══════════════════════════════════════════════════════════════════
+var LV={
+  basis:{label:'Basis',stars:'★',color:'#15803d',light:'#dcfce7',border:'#86efac',dark:'#14532d',desc:'Grundlegende Konzepte verstehen und wiedergeben'},
+  standard:{label:'Standard',stars:'★★',color:'#1d4ed8',light:'#dbeafe',border:'#93c5fd',dark:'#1e3a8a',desc:'Konzepte anwenden, vergleichen und erklären'},
+  erweitert:{label:'Erweitert',stars:'★★★',color:'#b45309',light:'#fef3c7',border:'#fcd34d',dark:'#78350f',desc:'Vertiefen, recherchieren und kritisch denken'}
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// STATIONSDATEN
+// ═══════════════════════════════════════════════════════════════════
+var ST=[
+ {id:0,emoji:'⚛️',title:'Atommodelle',sub:'Entwicklung der Atommodelle – Streuexperimente',
+  alt:'Alles um dich – dein Handy, Wasser, Luft, sogar du selbst – besteht aus Atomen. Aber wie sehen Atome aus? Das konnten Wissenschaftler:innen nicht direkt sehen, sondern nur durch clevere Experimente herausfinden.',
+  videos:[{url:'https://www.youtube.com/watch?v=FeZ6TUOs-4s',title:'Geschichte der Atommodelle',sub:'Von Dalton über Rutherford bis Bohr'}],
+  lz:{basis:'Ich kann die wichtigsten Atommodelle benennen und zeitlich einordnen.',
+      standard:'Ich kann das Rutherford-Streuexperiment erklären und Atommodelle vergleichen.',
+      erweitert:'Ich kann die Grenzen von Atommodellen kritisch reflektieren und das Quantenmodell beschreiben.'},
+  tasks:{
+   basis:[
+    {id:'1b1',n:1,p:true,t:'Schaue das Video zur Geschichte der Atommodelle an. Fülle danach den Zeitstrahl aus: Dalton (1808) → Thomson (1897) → Rutherford (1911) → Bohr (1913). Schreibe zu jedem Modell 1 Schlüsselbegriff.',
+     h:'Schlüsselbegriffe im Video: Kugel – Rosinenkuchen – Kern – Schalen',
+     s:'Dalton: Atomkugel | Thomson: Rosinenkuchen (Elektronen eingebettet) | Rutherford: Kern-Modell | Bohr: Schalenmodell (Elektronen auf Bahnen)',
+     mc:{q:'Welches Atommodell wird "Rosinenkuchen" genannt?',
+         opts:['A) Das Dalton-Modell (Atomkugel)','B) Das Rutherford-Modell (Kern-Hülle)','C) Das Thomson-Modell (Elektronen in positiver Masse)','D) Das Bohr-Modell (Schalen)'],cor:'C'}},
+    {id:'1b2',n:2,p:true,t:'Beschreibe das Bohr\'sche Atommodell in 2–3 Sätzen: Wo befinden sich Elektronen, Protonen und Neutronen?',
+     h:'Stell dir das Atom wie ein Mini-Sonnensystem vor: Was ist die "Sonne"? Was sind die "Planeten"?',
+     s:'Im Zentrum befindet sich der Atomkern mit Protonen (+) und Neutronen. Die Elektronen (–) bewegen sich auf festen Bahnen (Schalen) um den Kern – ähnlich wie Planeten um die Sonne.',
+     mc:{q:'Wo befinden sich die Elektronen im Bohr-Modell?',
+         opts:['A) Im Atomkern, zusammen mit Protonen','B) Auf festen Bahnen (Schalen) um den Kern','C) Gleichmäßig im gesamten Atom verteilt','D) In zufälligen Positionen außerhalb des Kerns'],cor:'B'}},
+    {id:'1b3',n:3,p:false,t:'Was hat Rutherfords Goldfolienexperiment gezeigt? Nenne das überraschende Ergebnis und was daraus geschlossen wurde.',
+     h:'Was hätte Thomson erwartet? Was passierte wirklich? Manche Alpha-Teilchen wurden stark abgelenkt!',
+     s:'Erwartung: Alle Teilchen fliegen durch. Überraschung: Einige wurden stark abgelenkt oder zurückgeworfen. Schluss: Die positive Ladung ist im winzigen Kern konzentriert.',
+     mc:{q:'Was war das überraschende Ergebnis von Rutherfords Goldfolienexperiment?',
+         opts:['A) Alle Alpha-Teilchen wurden zurückgeworfen','B) Die Goldfolie wurde zerstört','C) Einige Teilchen wurden stark abgelenkt oder zurückgeworfen','D) Die Teilchen wurden alle gleichmäßig leicht abgelenkt'],cor:'C'}}
+   ],
+   standard:[
+    {id:'1s1',n:4,p:true,t:'Zeichne das Rutherford-Streuexperiment: Alpha-Quelle, Goldfolie, Schirm. Zeige drei verschiedene Strahlenwege und erkläre, warum sie entstehen.',
+     h:'(1) Weit am Kern vorbei → gerade durch. (2) In Kernnähe → Ablenkung. (3) Frontaltreffer → Rückwurf durch positive Ladung im Kern.',
+     s:'Gerade Linie (meiste Teilchen). Gebogene Linie (nahe am Kern, elektrische Abstoßung). Zurückgeworfene Linie (direkter Kerntreffer). → Kern ist winzig und positiv geladen.',
+     mc:{q:'Warum werden einige Alpha-Teilchen im Rutherford-Experiment stark zurückgeworfen?',
+         opts:['A) Wegen der Elektronen in der Atomhülle','B) Wegen der positiven Ladung im winzigen Atomkern','C) Wegen der Stärke der Goldfolie','D) Wegen der Magnetkraft der Goldatome'],cor:'B'}},
+    {id:'1s2',n:5,p:true,t:'Vergleiche das Thomson-Modell ("Rosinenkuchen") mit dem Rutherford-Modell in einer Tabelle: Wo ist die positive Ladung? Wo sind Elektronen? Was widerlegt welches Modell?',
+     h:'Thomson: positive Ladung gleichmäßig verteilt, Elektronen eingebettet. Rutherford: positive Ladung im winzigen Kern konzentriert.',
+     s:'Thomson: Ladung verteilt, Elektronen eingebettet. Rutherford: Kern (+), Elektronen außen. Rutherfords Experiment WIDERLEGTE Thomson.',
+     mc:{q:'Was ist der entscheidende Unterschied zwischen dem Thomson- und dem Rutherford-Modell?',
+         opts:['A) Thomson: positive Ladung gleichmäßig verteilt; Rutherford: Ladung im kleinen Kern konzentriert','B) Thomson kannte Neutronen, Rutherford nicht','C) Thomson hatte keine Elektronen im Modell, Rutherford schon','D) Thomson hatte einen negativen Kern, Rutherford einen positiven'],cor:'A'}},
+    {id:'1s3',n:6,p:false,t:'Warum werden Atommodelle immer wieder verändert? Erkläre am historischen Beispiel, was das über die Natur naturwissenschaftlicher Modelle aussagt.',
+     h:'Dalton wurde durch Thomson widerlegt, Thomson durch Rutherford, Rutherford durch Bohr... Warum? Neue Experimente!',
+     s:'Neue Experimente liefern Erkenntnisse, die alte Modelle widerlegen. Modelle sind vereinfachte Darstellungen – sie gelten, bis Experimente sie widerlegen.',
+     mc:{q:'Warum wurden Atommodelle im Laufe der Zeit immer wieder verändert?',
+         opts:['A) Weil Wissenschaftler:innen sich nicht einigen konnten','B) Weil Modelle nach 10 Jahren automatisch veralten','C) Weil neue Experimente die Grenzen alter Modelle aufzeigten und bessere Erklärungen lieferten','D) Weil Schulbücher regelmäßig neu geschrieben werden'],cor:'C'}}
+   ],
+   erweitert:[
+    {id:'1e1',n:7,p:true,t:'Ein Modell ist immer vereinfacht. Nenne 2 Beispiele aus dem Alltag für vereinfachte Modelle (keine Atommodelle!) und erkläre: Was stellen sie dar, was lassen sie weg?',
+     h:'Landkarten, Globen, Anatomie-Puppen, Schaltpläne, Wettermodelle... Was vereinfachen sie?',
+     s:'Bsp. 1: Landkarte – zeigt Grenzen und Straßen, lässt Höhenunterschiede weg. Bsp. 2: Anatomie-Puppe – zeigt Organe vereinfacht, kein echtes Gewebe. Modelle sind nützlich, aber nie vollständig.',
+     mc:{q:'Was zeichnet ein gutes wissenschaftliches Modell aus?',
+         opts:['A) Es entspricht exakt der Realität in allen Details','B) Es ist mathematisch so komplex wie möglich','C) Es erklärt bestimmte Phänomene vereinfacht und gilt, bis neue Erkenntnisse es verbessern','D) Es wurde von möglichst vielen Wissenschaftler:innen gleichzeitig entwickelt'],cor:'C'}},
+    {id:'1e2',n:8,p:false,t:'Recherchiere (Schulbuch/Internet): Was kann das Bohr-Modell NICHT erklären? Was ist der Unterschied zwischen einer "Bahn" und einem "Orbital" im Quantenmodell?',
+     h:'Stichwörter: Elektronenwolke, Aufenthaltswahrscheinlichkeit, Orbital, Heisenberg\'sche Unschärferelation',
+     s:'Bohr versagt bei: Spektren komplexer Atome, Molekülbindungen. Quantenmodell: keine festen Bahnen, sondern Orbitale = Bereiche mit hoher Aufenthaltswahrscheinlichkeit (Elektronenwolke).',
+     mc:{q:'Was beschreibt ein "Orbital" im quantenmechanischen Atommodell?',
+         opts:['A) Den Bereich, in dem sich ein Elektron mit hoher Wahrscheinlichkeit aufhält','B) Die feste Kreisbahn eines Elektrons um den Kern','C) Den Abstand des Elektrons vom Kern','D) Die Ladung eines Elektrons'],cor:'A'}}
+   ]
+  }
+ },
+ {id:1,emoji:'💥',title:'Starke Kernkraft',sub:'Der "Kleber" des Atomkerns',
+  alt:'Gleichnamige Ladungen stoßen sich ab – das kennst du von Magneten. Warum fliegt dann ein Atomkern nicht auseinander, obwohl viele positive Protonen auf engstem Raum zusammengepfercht sind? Es muss eine noch stärkere Kraft geben!',
+  videos:[{url:'https://www.youtube.com/watch?v=fUe3u1Y2ST8',title:'Starke Kernkraft – einfach erklärt',sub:'Warum zerfällt der Kern nicht?'}],
+  lz:{basis:'Ich weiß, was die starke Kernkraft ist und warum Neutronen wichtig sind.',
+      standard:'Ich kann erklären, wann ein Atomkern stabil oder instabil ist.',
+      erweitert:'Ich verstehe den Zusammenhang zwischen Kernstruktur, Bindungsenergie und radioaktivem Zerfall.'},
+  tasks:{
+   basis:[
+    {id:'2b1',n:1,p:true,t:'Schaue das Video "Starke Kernkraft" an. Zeichne danach den Atomkern eines Neonatoms (Ne: 10 Protonen, 10 Neutronen) und beschrifte ihn mit p⁺ und n.',
+     h:'Im Kern dicht gepackt: p⁺ (Protonen, positiv) und n (Neutronen, neutral). Elektronen gehören NICHT in den Kern.',
+     s:'Kreis mit 10 p⁺ und 10 n eingezeichnet. Kein Elektron im Kern. Kern ist sehr klein (~10⁻¹⁵ m).',
+     mc:{q:'Welche Teilchen befinden sich im Atomkern?',
+         opts:['A) Nur Protonen','B) Protonen und Neutronen','C) Protonen, Neutronen und Elektronen','D) Nur Neutronen'],cor:'B'}},
+    {id:'2b2',n:2,p:true,t:'Welche ZWEI Kräfte wirken zwischen den Protonen im Kern? Welche "gewinnt" und warum?',
+     h:'(1) Elektrische Abstoßung – Protonen stoßen sich ab. (2) Starke Kernkraft – zieht alle Kernteilchen an. Welche ist stärker auf kurzer Distanz?',
+     s:'Elektrische Abstoßung vs. starke Kernkraft. Auf kurze Distanz gewinnt die starke Kernkraft – sie ist stärker und hält den Kern zusammen.',
+     mc:{q:'Warum zerfällt ein Atomkern nicht, obwohl sich Protonen elektrisch abstoßen?',
+         opts:['A) Weil Elektronen die Protonen zusammenhalten','B) Weil Neutronen keine Ladung haben','C) Weil die starke Kernkraft auf kurze Distanz stärker ist als die elektrische Abstoßung','D) Weil Protonen nur schwach geladen sind'],cor:'C'}},
+    {id:'2b3',n:3,p:false,t:'Erkläre in einem Satz: Warum braucht ein Atomkern Neutronen? Welche Aufgabe haben sie?',
+     h:'Neutronen tragen zur starken Kernkraft bei, haben aber keine Ladung → verstärken den "Kleber" ohne die Abstoßung zu erhöhen.',
+     s:'Neutronen verstärken die anziehende starke Kernkraft, ohne durch fehlende Ladung zur Abstoßung beizutragen – sie stabilisieren den Kern.',
+     mc:{q:'Welche Aufgabe haben Neutronen im Atomkern?',
+         opts:['A) Sie verstärken die Kernkraft, ohne die elektrische Abstoßung zu erhöhen','B) Sie stoßen die Protonen ab, damit der Kern nicht zu eng wird','C) Sie leiten die elektrische Ladung ab','D) Sie haben keine Aufgabe – Neutronen sind zufällig im Kern'],cor:'A'}}
+   ],
+   standard:[
+    {id:'2s1',n:4,p:true,t:'Erkläre mit einer Skizze: Warum braucht Uran (92 Protonen, 146 Neutronen) viel mehr Neutronen als Protonen, während Neon (10p, 10n) gleich viele hat?',
+     h:'Je mehr Protonen, desto stärker die elektrische Abstoßung. Mehr Neutronen = mehr Kernkraft ohne mehr Abstoßung.',
+     s:'Kleine Kerne: N ≈ Z ausreichend. Große Kerne: Elektrische Abstoßung wächst stark → mehr Neutronen nötig. Uran: N/Z ≈ 1,6.',
+     mc:{q:'Warum brauchen schwere Atomkerne wie Uran deutlich mehr Neutronen als Protonen?',
+         opts:['A) Weil Neutronen schwerer sind als Protonen','B) Weil mehr Neutronen mehr Kernkraft liefern, ohne die elektrische Abstoßung weiter zu erhöhen','C) Weil schwere Kerne mehr Elektronen brauchen','D) Weil Neutronen bei schweren Kernen Strahlung erzeugen'],cor:'B'}},
+    {id:'2s2',n:5,p:true,t:'Was bedeutet "instabiler Kern"? Wann nennt man ein Atom "radioaktiv"? Nenne je ein Beispiel für ein stabiles und ein radioaktives Atom.',
+     h:'Instabil = falsches Verhältnis N/Z → spontaner Zerfall. Radioaktiv = zerfällt spontan unter Strahlenaussendung.',
+     s:'Instabiler Kern: falsches N/Z → spontaner Zerfall. Radioaktiv: Zerfällt unter Strahlenaussendung. Stabil: C-12. Radioaktiv: C-14, Uran-235.',
+     mc:{q:'Wann ist ein Atomkern instabil (radioaktiv)?',
+         opts:['A) Wenn er zu viele Elektronen hat','B) Wenn er zu alt ist','C) Wenn das Verhältnis von Neutronen zu Protonen nicht stimmt','D) Wenn er aus einem seltenen Element besteht'],cor:'C'}},
+    {id:'2s3',n:6,p:false,t:'Alle Elemente mit mehr als 83 Protonen (Bismut) sind radioaktiv. Erkläre warum – die starke Kernkraft wirkt nur auf sehr kurze Distanz!',
+     h:'Was passiert bei sehr großen Kernen mit Protonen am "Rand"? Sie spüren die Kernkraft nur von Nachbarn, aber die Abstoßung von ALLEN Protonen.',
+     s:'Starke Kernkraft: nur Kurzdistanz. Rand-Protonen spüren Kernkraft nur von Nachbarn, aber Abstoßung von allen anderen Protonen → ab Z>83 kein stabiles N/Z mehr möglich.',
+     mc:{q:'Warum sind alle Elemente mit mehr als 83 Protonen radioaktiv?',
+         opts:['A) Die starke Kernkraft reicht bei sehr großen Kernen nicht mehr aus, alle Protonen zusammenzuhalten','B) Weil sie zu schwer für die Elektronenhülle sind','C) Weil sie künstlich hergestellt wurden','D) Weil ihre Neutronen instabil sind'],cor:'A'}}
+   ],
+   erweitert:[
+    {id:'2e1',n:7,p:true,t:'Was ist die "Bindungsenergie" eines Atomkerns? Erkläre den Begriff "Massendefekt" und die Formel E = mc². Warum ist Eisen-56 der stabilste Kern aller Elemente?',
+     h:'Bindungsenergie pro Nukleon, Massendefekt: Masse(Kern) < Summe der Teilchenmassen → Differenz = Bindungsenergie (E = mc²).',
+     s:'Bindungsenergie = Energie zum Zerreißen des Kerns. Massendefekt: Kernmasse < Summe Teilchenmassen → Differenz als Energie (E=mc²) frei. Eisen-56: höchste Bindungsenergie/Nukleon → am stabilsten.',
+     mc:{q:'Was ist der "Massendefekt" eines Atomkerns?',
+         opts:['A) Die fehlenden Elektronen in der Hülle','B) Die Differenz zwischen Kernmasse und der Summe der Teilchenmassen – sie entspricht der Bindungsenergie (E=mc²)','C) Der Unterschied zwischen Protonen- und Neutronenzahl','D) Der Massenverlust beim radioaktiven Zerfall'],cor:'B'}},
+    {id:'2e2',n:8,p:false,t:'Warum wird bei der Kernspaltung (schwere Kerne) UND bei der Kernfusion (leichte Kerne) jeweils Energie frei? Erkläre mit dem Konzept der Bindungsenergie pro Nukleon.',
+     h:'Beide Prozesse "bewegen sich" auf der Bindungsenergie-Kurve in Richtung Eisen (Maximum). Die Differenz wird als Energie freigesetzt.',
+     s:'Kernspaltung: schwere → leichtere Kerne (näher an Eisen) → höhere Bindungsenergie/Nukleon → Energie frei. Fusion: Leichte → schwerer. Beide Richtung Eisen-Maximum.',
+     mc:{q:'Bei welchem Kern ist die Bindungsenergie pro Nukleon am höchsten?',
+         opts:['A) Uran-235 (sehr schwer)','B) Wasserstoff-1 (sehr leicht)','C) Eisen-56','D) Kohlenstoff-12'],cor:'C'}}
+   ]
+  }
+ },
+ {id:2,emoji:'☢️',title:'Strahlungsarten',sub:'Alpha-, Beta- und Gammastrahlung im Alltag',
+  alt:'Der Rauchmelder über euch enthält Americium-241 – einen Alpha-Strahler – und ist völlig sicher! Beim Zahnarzt trägt das Personal Bleischürzen. In der Nuklearmedizin werden radioaktive Stoffe gezielt eingesetzt. Strahlung ist nicht gleich Strahlung – es kommt auf die Art an!',
+  videos:[{url:'https://www.youtube.com/watch?v=edlKhWHLVSI',title:'Radioaktiver Zerfall – Alpha, Beta, Gamma',sub:'Strahlungsarten einfach erklärt'}],
+  lz:{basis:'Ich kann Alpha-, Beta- und Gammastrahlung unterscheiden und ihre Durchdringung beschreiben.',
+      standard:'Ich kann Schutzmaßnahmen begründen und Alltagsbeispiele erklären.',
+      erweitert:'Ich kann medizinische Anwendungen analysieren und Strahlenrisiken realistisch einordnen.'},
+  tasks:{
+   basis:[
+    {id:'3b1',n:1,p:true,t:'Schaue das Video zu den Strahlungsarten an. Fülle danach diese Tabelle aus:\n| Strahlung | Besteht aus... | Reichweite | Gestoppt durch... |',
+     h:'Alpha = Heliumkern (2p+2n). Beta = Elektron (β⁻). Gamma = elektromagnetische Welle (wie Licht, aber viel energiereicher).',
+     s:'Alpha: Heliumkern, wenige cm in Luft, Papier/Haut. Beta: Elektronen, ~1m in Luft, Aluminium. Gamma: EM-Welle, große Reichweite, nur durch dickes Blei stark gedämpft.',
+     mc:{q:'Was ist Gammastrahlung?',
+         opts:['A) Ein Heliumkern aus dem Atomkern','B) Ein schnelles Elektron aus dem Kern','C) Eine hochenergetische elektromagnetische Welle (wie Licht, aber viel energiereicher)','D) Ein Neutron aus dem Kern'],cor:'C'}},
+    {id:'3b2',n:2,p:true,t:'Zeichne die Durchdringungsfähigkeit: Zeige, welche Strahlung Papier, Aluminium und Blei durchdringt.',
+     h:'Alpha: stoppt an Papier/Haut. Beta: durch Papier, stoppt an Aluminium. Gamma: durch alles, nur Blei dämpft stark.',
+     s:'Reihenfolge: Alpha < Beta < Gamma. Alpha → |Papier|. Beta → Papier → |Aluminium|. Gamma → Papier → Aluminium → |Blei| (gedämpft).',
+     mc:{q:'Welche Strahlung wird schon durch ein einfaches Blatt Papier oder die Haut gestoppt?',
+         opts:['A) Gammastrahlung','B) Betastrahlung','C) Alphastrahlung','D) Keine – alle Strahlungsarten dringen durch Papier'],cor:'C'}},
+    {id:'3b3',n:3,p:false,t:'Ordne zu: α, β, γ → Heliumkern / Elektron / elektromagnetische Welle',
+     h:'α = Alpha (Heliumkern: 2 Protonen + 2 Neutronen). β = Beta (Elektron). γ = Gamma (hochenergetische EM-Welle).',
+     s:'α → Heliumkern (²₄He, positiv). β⁻ → Elektron (negativ). γ → elektromagnetische Welle (elektrisch neutral).',
+     mc:{q:'Was ist Alpha-Strahlung?',
+         opts:['A) Ein hochenergetisches Photon (elektromagnetische Strahlung)','B) Ein Elektron, das aus dem Kern ausgestoßen wird','C) Ein Heliumkern (2 Protonen + 2 Neutronen) aus dem Atomkern','D) Ein Neutron aus dem Atomkern'],cor:'C'}}
+   ],
+   standard:[
+    {id:'3s1',n:4,p:true,t:'Der Rauchmelder enthält Americium-241 (Alpha-Strahler). Erkläre: Warum ist das Gerät an der Decke SICHER? Warum sollte man es NICHT auseinandernehmen oder gar verschlucken?',
+     h:'Alpha-Reichweite in Luft: nur wenige cm. Von Luft und Haut gestoppt. Aber was passiert, wenn Alpha-Strahler INNEN im Körper sind?',
+     s:'Sicher: Alpha dringt nicht durch Gehäuse oder Luft bis zur Person. NICHT auseinandernehmen: Wenn Americium inhaliert/verschluckt → direkter Kontakt mit Gewebe → hohe lokale Strahlendosis.',
+     mc:{q:'Warum ist Alpha-Strahlung von außen harmlos, aber von innen (eingeatmet) gefährlich?',
+         opts:['A) Von außen: Strahlung wird von Luft und Haut gestoppt. Von innen: direkter Kontakt mit Gewebe ohne schützende Barriere','B) Alpha-Strahlung ist von außen eigentlich genauso gefährlich','C) Von außen: Alpha wird von Kleidung gestoppt. Von innen: Alpha dringt in den Kern','D) Alpha-Strahlung ist im Körper harmlos, weil sie keine Ladung hat'],cor:'A'}},
+    {id:'3s2',n:5,p:true,t:'Beim Röntgen beim Zahnarzt trägt das medizinische Personal eine Bleischürze. Erkläre: Welche Strahlung wird verwendet und warum schützt gerade Blei?',
+     h:'Röntgenstrahlung = hochenergetische elektromagnetische Strahlung (ähnlich Gamma). Was stoppt Gamma-Strahlung am besten?',
+     s:'Röntgenstrahlung = elektromagnetisch (wie Gamma). Blei: sehr hohe Dichte + hohe Ordnungszahl → absorbiert Röntgen-/Gammastrahlung am effektivsten. Aluminium oder Papier wären kaum wirksam.',
+     mc:{q:'Warum schützt eine Bleischürze vor Röntgenstrahlung?',
+         opts:['A) Blei ist magnetisch und lenkt die Strahlung ab','B) Blei hat sehr hohe Dichte und Ordnungszahl und absorbiert elektromagnetische Strahlung effektiv','C) Blei ist günstig und leicht verfügbar','D) Blei reflektiert die Strahlung zurück zur Quelle'],cor:'B'}},
+    {id:'3s3',n:6,p:false,t:'Welche Strahlung ist bei externer Kontamination (außen auf der Haut) am gefährlichsten, welche bei interner (eingeatmet)? Erkläre den Unterschied.',
+     h:'Außen: Was dringt durch die Haut? Innen: Was schadet am meisten auf engem Raum direkt am Gewebe?',
+     s:'Außen gefährlich: Gamma (dringt durch alles). Alpha/Beta werden von Haut gestoppt. Innen gefährlich: Alpha (sehr hohe ionisierende Wirkung auf direktes Gewebe).',
+     mc:{q:'Welche Strahlung ist bei externer Bestrahlung (von außen auf den Körper) am gefährlichsten?',
+         opts:['A) Alpha – weil sie so stark ionisiert','B) Beta – weil Elektronen schnell sind','C) Gamma – weil sie durch den ganzen Körper dringt','D) Alle drei sind gleich gefährlich'],cor:'C'}}
+   ],
+   erweitert:[
+    {id:'3e1',n:7,p:true,t:'In der Nuklearmedizin wird Technetium-99m eingesetzt (Gamma-Strahler, HWZ: 6 Stunden). Erkläre, warum genau diese Eigenschaften für Diagnostik ideal sind. Was wären die Probleme mit einem Alpha-Strahler oder HWZ von 30 Jahren?',
+     h:'Diagnostik: Strahlung muss nach außen dringen (→ Gamma). Sicherheit: HWZ kurz (→ 6h klingt schnell ab) aber lang genug für die Untersuchung.',
+     s:'Gamma → von außen messbar. HWZ 6h → nach 24h (4 HWZ) nur noch 6% aktiv → Patient:in schnell strahlenarm. Alpha: kein Signal nach außen, hohes internes Risiko. HWZ 30J: Patient:in lange belastet.',
+     mc:{q:'Warum ist eine kurze Halbwertszeit (wie 6h bei Tc-99m) für medizinische Diagnostik ideal?',
+         opts:['A) Damit der Patient:in möglichst lange strahlt und gut gemessen werden kann','B) Damit die Strahlung nach der Untersuchung schnell abklingt und die Strahlenbelastung gering bleibt','C) Damit weniger Strahlung erzeugt wird und die Bilder schärfer werden','D) Wegen der geringeren Kosten in der Herstellung'],cor:'B'}},
+    {id:'3e2',n:8,p:false,t:'Recherchiere: Erstelle ein "Strahlenrisiko-Ranking" (in mSv): Flugreise Wien–New York, Röntgen beim Zahnarzt, jährliche Hintergrundstrahlung in Österreich, Rauchen 1 Packung/Tag. Was überrascht dich?',
+     h:'Stichwörter: Sievert, effektive Dosis, natürliche Radioaktivität, strahlenschutz.at, Polonium-210 in Zigaretten.',
+     s:'Hintergrund AT: ~2–3 mSv/J. Flugreise Wien-NY: ~0,05 mSv. Röntgen Zahn: ~0,01 mSv. Rauchen 1 Pack/Tag: ~70 mSv/J (Polonium-210!). Überraschend: Rauchen = bei weitem größtes Alltagsstrahlenrisiko.',
+     mc:{q:'Welche Alltagsaktivität bedeutet die höchste Strahlenbelastung pro Jahr?',
+         opts:['A) Rauchen (1 Packung/Tag) – wegen Polonium-210 im Tabak (~70 mSv/J)','B) Röntgen beim Zahnarzt (~0,01 mSv pro Untersuchung)','C) Eine Flugreise Wien–New York (~0,05 mSv)','D) Das Wohnen in Österreich (natürliche Hintergrundstrahlung ~2–3 mSv/J)'],cor:'A'}}
+   ]
+  }
+ },
+ {id:3,emoji:'⏱️',title:'Halbwertszeit',sub:'Radioaktiver Zerfall & Geigerzähler',
+  alt:'Wie alt ist ein Mammut-Knochen? Wie lange ist Tschernobyl noch gesperrt? Wann darf man nach einer nuklearmedizinischen Untersuchung Babys wieder stillen? Die Halbwertszeit beantwortet all das – und das Würfelexperiment zeigt dir wie!',
+  videos:[{url:'https://www.youtube.com/watch?v=perqIy6JePc',title:'Halbwertszeit – einfach erklärt',sub:'Nuklidkarte, Zerfallsgesetz'}],
+  lz:{basis:'Ich kann den Begriff Halbwertszeit definieren und aus einem Diagramm ablesen.',
+      standard:'Ich kann einfache Halbwertszeitberechnungen durchführen und auf Alltagsbeispiele anwenden.',
+      erweitert:'Ich kann das Prinzip der C-14-Datierung erklären und komplex rechnen.'},
+  tasks:{
+   basis:[
+    {id:'4b1',n:1,p:true,t:'Würfelexperiment: Starte mit 100 Würfeln. Alle Würfel werfen – alle Sechser sind "zerfallen" und werden entfernt. Nach jeder Runde Anzahl ins Diagramm eintragen (mind. 10 Runden). Beschreibe den Verlauf der Kurve.',
+     h:'In jeder Runde "zerfällt" ungefähr 1/6 der verbleibenden Würfel. Das modelliert den Zufall beim radioaktiven Zerfall!',
+     s:'Kurve fällt exponentiell ab: am Anfang große Abnahme, später immer kleinere Schritte. Nähert sich null, erreicht sie aber nie.',
+     mc:{q:'Was modelliert das Würfelexperiment beim radioaktiven Zerfall?',
+         opts:['A) Dass immer genau 6 Atome pro Sekunde zerfallen','B) Dass ein zufälliger, aber statistisch konstanter Anteil der Kerne pro Zeiteinheit zerfällt','C) Dass Atome nach 6 Würfen sicher zerfallen','D) Dass Radioaktivität durch Würfeln entstehen kann'],cor:'B'}},
+    {id:'4b2',n:2,p:true,t:'Was ist die Halbwertszeit? Schreibe eine Definition in eigenen Worten und gib ein Beispiel mit Zahlen.',
+     h:'"Halb" = Hälfte. Wann ist die Hälfte der radioaktiven Atome zerfallen? Beispiel: Von 1000 → 500...',
+     s:'Halbwertszeit (HWZ) = Zeitraum, nach dem die Hälfte der ursprünglichen radioaktiven Kerne zerfallen ist. Bsp Jod-131: HWZ = 8 Tage. Von 800 → 400 nach 8 Tagen.',
+     mc:{q:'Was bedeutet Halbwertszeit?',
+         opts:['A) Die Zeit, nach der alle radioaktiven Atome zerfallen sind','B) Die Zeit, nach der ein einzelnes Atom sicher zerfallen ist','C) Der Zeitraum, nach dem die Hälfte der ursprünglichen radioaktiven Kerne zerfallen ist','D) Die Hälfte der Lebensdauer eines radioaktiven Elements'],cor:'C'}},
+    {id:'4b3',n:3,p:false,t:'Lies aus einem Diagramm ab: Eine radioaktive Substanz hat anfangs 800 Impulse/min. Nach 3 Stunden sind es noch 100. Wie lang ist die Halbwertszeit?',
+     h:'800 → 400 → 200 → 100: Wie viele Halbierungsschritte? In 3 Stunden?',
+     s:'800 → 400 → 200 → 100 = 3 Halbierungsschritte in 3 Stunden → HWZ = 1 Stunde.',
+     mc:{q:'Von 800 Impulsen/min sind nach 3 Stunden noch 100 übrig. Wie lang ist die Halbwertszeit?',
+         opts:['A) 1 Stunde (3 Halbierungsschritte in 3 Stunden)','B) 3 Stunden','C) 0,5 Stunden','D) 45 Minuten'],cor:'A'}}
+   ],
+   standard:[
+    {id:'4s1',n:4,p:true,t:'Rechenaufgabe: Jod-131 (HWZ = 8 Tage), anfangs 1600 Atome. Berechne die Anzahl nach 8, 16, 24 und 32 Tagen. Stelle als Tabelle UND Graphen dar.',
+     h:'Nach jeder HWZ halbiert sich die Anzahl: 1600 → 800 → 400 → 200 → 100.',
+     s:'8 Tage: 800. 16 Tage: 400. 24 Tage: 200. 32 Tage: 100. Graph: exponentiell abfallende Kurve.',
+     mc:{q:'Jod-131 (HWZ = 8 Tage), anfangs 1600 Atome. Wie viele sind nach 16 Tagen noch aktiv?',
+         opts:['A) 800','B) 400','C) 200','D) 100'],cor:'B'}},
+    {id:'4s2',n:5,p:true,t:'Nach Tschernobyl (1986) war Jod-131 besonders gefährlich. Erkläre: (a) Warum ist gerade Jod so gefährlich? (b) Warum war die Jod-131-Gefahr nach einigen Wochen vorbei?',
+     h:'(a) Schilddrüse nimmt Jod auf (braucht es für Hormone). (b) Jod-131: HWZ = 8 Tage. Nach 10 HWZ (80 Tage): < 0,1% übrig.',
+     s:'(a) Schilddrüse sammelt Jod gezielt → radioaktives Jod-131 → hohe Dosis direkt im Organ. (b) Nach 80 Tagen (10 × 8): <0,1% aktiv. Schutz: Jodtabletten sättigen Schilddrüse.',
+     mc:{q:'Warum war Jod-131 nach Tschernobyl besonders gefährlich für die Schilddrüse?',
+         opts:['A) Weil Jod-131 Gammastrahlend ist und den ganzen Körper durchdringt','B) Weil die Schilddrüse Jod gezielt aufnimmt – auch radioaktives Jod-131 – und so eine hohe Strahlendosis erhält','C) Weil Jod-131 eine sehr lange Halbwertszeit von 80 Jahren hat','D) Weil Jod-131 nur in der Schilddrüse vorkommt'],cor:'B'}},
+    {id:'4s3',n:6,p:false,t:'Erkläre anhand des Würfelexperiments: Warum ist die Halbwertszeit eine statistische Aussage? Kann man vorhersagen, wann EIN bestimmtes Atom zerfällt?',
+     h:'Beim Würfeln: Kann man den nächsten Wurf vorhersagen? Nein. Aber für viele Würfel gilt: Durchschnittswerte sind vorhersagbar.',
+     s:'Beim einzelnen Atom: unmöglich vorherzusagen. Bei vielen Atomen greift die Statistik. Wie beim Würfeln: einen Würfel → unvorhersehbar. Millionen Würfel → ~1/6 zeigen eine 6.',
+     mc:{q:'Kann man vorhersagen, wann ein einzelnes radioaktives Atom genau zerfällt?',
+         opts:['A) Ja – über die Halbwertszeit berechnet man den genauen Zeitpunkt','B) Ja – je älter das Atom, desto sicherer zerfällt es bald','C) Nein – der Zerfall eines einzelnen Atoms ist unvorhersehbar; die HWZ gilt nur für viele Atome statistisch','D) Nein – Atome zerfallen zufällig und können nie beschrieben werden'],cor:'C'}}
+   ],
+   erweitert:[
+    {id:'4e1',n:7,p:true,t:'Erkläre das Prinzip der C-14-Datierung: (a) Warum enthält lebende Materie immer gleich viel C-14? (b) Was passiert nach dem Tod? (c) Wie berechnet man das Alter?',
+     h:'Kosmische Strahlung → C-14 in Atmosphäre → von Pflanzen aufgenommen → Gleichgewicht. Nach Tod: kein Nachschub.',
+     s:'(a) Lebende Organismen nehmen ständig C-14 auf → Gleichgewicht. (b) Nach Tod: kein Nachschub → C-14 zerfällt. (c) Aus Verhältnis C-14/C-12 → vergangene HWZ → Alter.',
+     mc:{q:'Warum enthält lebende Materie immer gleich viel C-14?',
+         opts:['A) Weil C-14 durch kosmische Strahlung ständig neu gebildet und über Nahrung/Atmung aufgenommen wird – es entsteht ein Gleichgewicht','B) Weil C-14 in lebenden Zellen produziert wird','C) Weil C-14 nicht zerfällt, solange der Organismus lebt','D) Weil C-14 und C-12 immer im Verhältnis 1:1 vorkommen'],cor:'A'}},
+    {id:'4e2',n:8,p:false,t:'Rechenaufgabe (C-14, HWZ = 5730 Jahre): (a) Ein Holzstück hat noch 12,5% C-14. Wie alt? (b) Warum funktioniert C-14-Datierung NICHT für Dinosaurierknochen? Was wird stattdessen verwendet?',
+     h:'(a) 12,5% = 1/8 = (1/2)³ → 3 HWZ. (b) Nach ~10 HWZ kein C-14 mehr messbar. Dinosaurier: ~65 Mio. Jahre.',
+     s:'(a) 12,5% = (½)³ → 3 HWZ = 17.190 Jahre. (b) C-14 nach ~57.000 Jahren nicht messbar. Für Dinosaurier: Kalium-Argon- oder Uran-Blei-Datierung.',
+     mc:{q:'Ein Holzstück enthält noch 25% seines ursprünglichen C-14 (HWZ 5730 J). Wie alt ist es?',
+         opts:['A) 5.730 Jahre (1 HWZ)','B) 11.460 Jahre (2 HWZ: 100% → 50% → 25%)','C) 17.190 Jahre (3 HWZ)','D) 22.920 Jahre (4 HWZ)'],cor:'B'}}
+   ]
+  }
+ },
+ {id:4,emoji:'⚡',title:'Kernspaltung & KKW',sub:'Energie aus dem Atom – Chancen und Risiken',
+  alt:'Österreich grenzt an Kernkraftwerke in Tschechien, der Slowakei und Ungarn. Das fertig gebaute AKW Zwentendorf in NÖ wurde 1978 nach einer Volksabstimmung NIE eingeschaltet! In der Klimadebatte diskutieren Expert:innen: Ist Kernkraft eine Lösung? Die Physik dahinter musst du kennen.',
+  videos:[
+   {url:'https://www.youtube.com/watch?v=GsUq0Pr0Gc0',title:'Kernspaltung und Kernenergie',sub:'Einfach und anschaulich erklärt'},
+   {url:'https://www.youtube.com/watch?v=wHCzIENgimc',title:'Wie funktioniert ein Kernkraftwerk?',sub:'Aufbau und Funktionsweise'}
+  ],
+  lz:{basis:'Ich kann Kernspaltung, Kettenreaktion und die Energieumwandlung im KKW erklären.',
+      standard:'Ich kann die Kernenergie mit physikalischen Fakten kritisch bewerten.',
+      erweitert:'Ich kann Reaktorunfälle physikalisch analysieren und eine sachliche Diskussion führen.'},
+  tasks:{
+   basis:[
+    {id:'5b1',n:1,p:true,t:'Schaue die Videos zu Kernspaltung und KKW an. Erkläre danach in 2 Sätzen: Was ist Kernspaltung? Was passiert bei der Spaltung eines Uran-235-Kerns?',
+     h:'Uran-235 + Neutron → 2 kleinere Kerne + 2–3 neue Neutronen + sehr viel Wärmeenergie.',
+     s:'Kernspaltung: Ein schwerer Kern (Uran-235) wird von einem langsamen Neutron getroffen und bricht in zwei kleinere Kerne auf. Dabei werden 2–3 neue Neutronen und sehr viel Wärmeenergie freigesetzt.',
+     mc:{q:'Was entsteht bei der Kernspaltung von Uran-235?',
+         opts:['A) Nur Wärme, keine neuen Teilchen','B) Kleinere Kerne + neue Neutronen + Wärmeenergie','C) Heliumkerne und Elektronen','D) Uran-235 wandelt sich in Gold um'],cor:'B'}},
+    {id:'5b2',n:2,p:true,t:'Zeichne und beschrifte die Energieumwandlungskette im Kernkraftwerk: Von der Kernenergie bis zur Steckdose (mind. 4 Schritte).',
+     h:'Kernenergie → Wärme (Dampf) → Bewegungsenergie (Turbine) → Elektrische Energie (Generator)',
+     s:'Kernenergie → Wärmeenergie (Reaktor erhitzt Wasser → Dampf) → Bewegungsenergie (Turbine) → Elektrische Energie (Generator) → Stromnetz.',
+     mc:{q:'Wie lautet die Energieumwandlungskette im Kernkraftwerk?',
+         opts:['A) Elektrische Energie → Wärme → Kernenergie → Bewegung','B) Kernenergie → Wärmeenergie → Bewegungsenergie (Turbine) → Elektrische Energie','C) Kernenergie → Lichtenergie → Elektrische Energie','D) Chemische Energie → Wärme → Strom'],cor:'B'}},
+    {id:'5b3',n:3,p:false,t:'Was ist eine Kettenreaktion? Erkläre in 2 Sätzen. Was ist der Unterschied zwischen kontrolliert (KKW) und unkontrolliert (Atombombe)?',
+     h:'Neutron spaltet Kern → neue Neutronen → spalten weitere Kerne → ... Wie wird das im KKW gesteuert?',
+     s:'Kettenreaktion: Neutronen aus einer Spaltung lösen weitere Spaltungen aus. KKW: kontrolliert durch Steuerstäbe. Atombombe: unkontrolliert, explosiv.',
+     mc:{q:'Was ist der Unterschied zwischen der Kettenreaktion im Kernkraftwerk und in einer Atombombe?',
+         opts:['A) Im KKW wird kein Uran verwendet, in der Bombe schon','B) Im KKW ist die Reaktion kontrolliert (Steuerstäbe), in der Atombombe unkontrolliert und explosiv','C) Die Atombombe nutzt Kernfusion, das KKW Kernspaltung','D) Im KKW gibt es keine Kettenreaktion'],cor:'B'}}
+   ],
+   standard:[
+    {id:'5s1',n:4,p:true,t:'Erstelle eine Mindmap "Kernspaltung" mit mindestens 5 Ästen: Produkte? Energie? Unkontrolliert vs. kontrolliert? Moderatoren? Steuerstäbe? Atommüll?',
+     h:'Moderatoren (Wasser, Graphit) bremsen Neutronen. Steuerstäbe (Bor, Cadmium) absorbieren Neutronen und regulieren die Reaktion.',
+     s:'Äste: Produkte (Kerne, Neutronen, Wärme), Energie (E=mc²), Kettenreaktion (kontrolliert/unkontrolliert), Steuerstäbe (regulieren), Moderatoren (bremsen Neutronen), Atommüll (Endlagerung).',
+     mc:{q:'Was ist die Funktion der Steuerstäbe in einem Kernreaktor?',
+         opts:['A) Sie liefern zusätzliche Neutronen für die Kettenreaktion','B) Sie kühlen den Reaktorkern','C) Sie absorbieren Neutronen und regulieren so die Geschwindigkeit der Kettenreaktion','D) Sie erzeugen Strom direkt aus der Kernenergie'],cor:'C'}},
+    {id:'5s2',n:5,p:true,t:'Nenne je 2 Argumente FÜR und GEGEN Kernenergie als Beitrag zum Klimaschutz. Nutze konkrete Fakten (CO₂, Kosten, Bauzeit, Atommüll, Unfallrisiko).',
+     h:'Pro: Kein CO₂ im Betrieb, hohe Energiedichte, zuverlässige Grundlast. Contra: Atommüll ungelöst, Unfallrisiko, sehr hohe Baukosten, lange Bauzeit.',
+     s:'Pro: Kein CO₂ im Betrieb (~12g/kWh wie Wind), stabile Stromversorgung, hohe Energiedichte. Contra: Atommüll (100.000+ Jahre), Unfallrisiko, Kosten explodieren, Bauzeit 15–20 Jahre.',
+     mc:{q:'Welches Argument spricht GEGEN den Einsatz von Kernenergie für den Klimaschutz?',
+         opts:['A) Kernkraftwerke stoßen viel CO₂ im Betrieb aus','B) Kernkraftwerke können keinen zuverlässigen Strom liefern','C) Der radioaktive Atommüll muss über 100.000 Jahre sicher gelagert werden – eine noch ungelöste Aufgabe','D) Kernenergie ist teurer als alle anderen Energieformen'],cor:'C'}},
+    {id:'5s3',n:6,p:false,t:'Österreich hat das fertige AKW Zwentendorf 1978 nie eingeschaltet. Recherchiere: Was passierte? Welche politischen Folgen hatte das? Was steht im Atomsperrgesetz?',
+     h:'Volksabstimmung 1978: knappes Ergebnis. Bruno Kreisky. Atomsperrgesetz 1978.',
+     s:'1978: Volksabstimmung → 50,5% GEGEN Inbetriebnahme. Kreisky hatte sein Amt daran geknüpft. Atomsperrgesetz: Verbot des KKW-Betriebs in Österreich. Zwentendorf steht heute noch.',
+     mc:{q:'Was war das Ergebnis der österreichischen Volksabstimmung zu Zwentendorf 1978?',
+         opts:['A) Eine klare Mehrheit für die Inbetriebnahme des AKW','B) Eine knappe Mehrheit GEGEN die Inbetriebnahme – das AKW wurde nie eingeschaltet','C) Das Ergebnis war unentschieden, daher entschied das Parlament','D) Die Abstimmung wurde abgesagt'],cor:'B'}}
+   ],
+   erweitert:[
+    {id:'5e1',n:7,p:true,t:'Vergleiche Tschernobyl (1986) und Fukushima (2011): Was lief jeweils technisch schief? Welche Konsequenzen hatte das für die Energiepolitik in Deutschland, Österreich und weltweit?',
+     h:'Tschernobyl: RBMK-Reaktor, kein Containment, Graphitbrand. Fukushima: Tsunami → Kühlungsausfall → Kernschmelze trotz Abschaltung.',
+     s:'Tschernobyl: Instabiler Reaktortyp + menschliches Versagen, kein Containment → weite Strahlenfreisetzung. Fukushima: Tsunami → Kühlungsausfall → Kernschmelze. Folgen: DE Atomausstieg 2023.',
+     mc:{q:'Was war der entscheidende Unterschied zwischen den Unfällen in Tschernobyl und Fukushima?',
+         opts:['A) Beide hatten dieselbe Ursache: menschliches Versagen','B) Tschernobyl: Reaktordesign + Bedienungsfehler; Fukushima: Naturkatastrophe (Tsunami) führte zu Kühlungsausfall','C) Fukushima war schwerwiegender als Tschernobyl','D) Tschernobyl war ein Kernfusionsreaktor, Fukushima ein Kernspaltungsreaktor'],cor:'B'}},
+    {id:'5e2',n:8,p:false,t:'Schreibe ein strukturiertes Argument (12–15 Sätze): "Soll Österreich seine Nachbarländer auffordern, ihre Kernkraftwerke abzuschalten?" Struktur: These – mind. 3 Argumente Pro & Contra – Abwägung – Fazit.',
+     h:'Physik: Strahlung kennt keine Grenzen (Tschernobyl-Wolke über Österreich). Politik: Souveränität der Nachbarländer. Ökonomie: Energiepreise.',
+     s:'Bewertung: These + mind. 3 begründete Argumente je Seite + Abwägung + Fazit. Wichtig: Physikalische Fakten eingebaut, eigene Meinung begründet, Gegenperspektive berücksichtigt.',
+     mc:{q:'Was ist für ein strukturiertes wissenschaftliches/politisches Argument unerlässlich?',
+         opts:['A) Eine klare, einseitige Meinung ohne Gegenargumente','B) Möglichst viele Zahlen, unabhängig davon ob sie korrekt sind','C) These + begründete Argumente beider Seiten + Abwägung + begründetes Fazit','D) Mindestens 5 Quellen aus dem Internet'],cor:'C'}}
+   ]
+  }
+ }
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// STATE & PERSISTENZ
+// ═══════════════════════════════════════════════════════════════════
+var S={name:'',level:'',stIdx:0,done:{},hints:{},sols:{},mc:{}};
+var _saved=null;
+var _pickedLevel='';
+
+function loadLocal(){try{var d=JSON.parse(localStorage.getItem('lp_radio2')||'null');if(d&&d.level&&d.name)_saved=d;}catch(e){}}
+function saveLocal(){try{localStorage.setItem('lp_radio2',JSON.stringify(S));}catch(e){}}
+function applyState(d){S.name=d.name||'';S.level=d.level||'';S.stIdx=d.stIdx||0;S.done=d.done||{};S.hints=d.hints||{};S.sols=d.sols||{};S.mc=d.mc||{};}
+
+// ═══════════════════════════════════════════════════════════════════
+// HILFSFUNKTIONEN
+// ═══════════════════════════════════════════════════════════════════
+function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function stProg(i,lv){var ts=ST[i].tasks[lv||S.level]||[],d=0;ts.forEach(function(t){if(S.done[t.id])d++;});return{total:ts.length,done:d};}
+function totProg(){var d=0,t=0;for(var i=0;i<ST.length;i++){var p=stProg(i);d+=p.done;t+=p.total;}return{done:d,total:t,pct:t?Math.round(d/t*100):0};}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER INTRO
+// ═══════════════════════════════════════════════════════════════════
+function renderIntro(){
+ var resumeHtml='';
+ if(_saved&&_saved.name&&_saved.level)resumeHtml='<div style="margin-bottom:14px;padding:11px 14px;background:#dbeafe;border:1px solid #93c5fd;border-radius:8px;font-size:13px;color:#1e3a8a;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span>🔄 Fortschritt gefunden: <strong>'+e(_saved.name)+'</strong> – '+e(LV[_saved.level].stars+' '+LV[_saved.level].label)+'</span><button onclick="resumeSaved()" style="padding:5px 14px;background:#1d4ed8;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">Weiter →</button></div>';
+ return'<div class="intro-wrap"><div class="intro-card">'
+  +'<div style="text-align:center;margin-bottom:22px"><div style="font-size:52px;margin-bottom:8px">⚛️</div>'
+  +'<h1 style="font-size:24px;font-weight:900;color:#1e3a5f">Lernpfad Radioaktivität</h1>'
+  +'<p style="font-size:13px;color:#64748b;margin-top:5px">Physik 4. Klasse &nbsp;·&nbsp; 5 Stationen &nbsp;·&nbsp; Differenziertes Stationenlernen</p>'
+  +'<div style="display:flex;justify-content:center;gap:10px;margin-top:10px;flex-wrap:wrap">'+ST.map(function(s){return'<span style="font-size:12px;color:#94a3b8">'+s.emoji+' '+e(s.title)+'</span>';}).join('')+'</div></div>'
+  +resumeHtml
+  +'<div style="margin-bottom:16px"><label class="field-label">Dein Name:</label>'
+  +'<input type="text" id="inp" placeholder="Vorname Nachname" autocomplete="off" oninput="checkStart()"></div>'
+  +'<div style="margin-bottom:22px"><label class="field-label" style="margin-bottom:10px">Dein Niveau (von der Lehrperson zugeteilt):</label>'
+  +Object.keys(LV).map(function(k){var c=LV[k];return'<div class="lvl-opt" id="lo-'+k+'" onclick="pickLevel(\''+k+'\')"><div class="lvl-radio" id="lr-'+k+'"><span id="ld-'+k+'" style="color:#fff;font-size:11px;font-weight:900;display:none">●</span></div><div><div style="font-weight:800;color:'+c.color+';font-size:14px">'+c.stars+' '+e(c.label)+'</div><div style="font-size:12px;color:#6b7280;margin-top:1px">'+e(c.desc)+'</div></div></div>';}).join('')
+  +'</div><button class="btn-start" id="bstart" onclick="startNew()" disabled>Lernpfad starten →</button></div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER TASK CARD
+// ═══════════════════════════════════════════════════════════════════
+function renderTask(task){
+ var c=LV[S.level];
+ var done=!!S.done[task.id],sh=!!S.hints[task.id],ss=!!S.sols[task.id];
+ var mcState=S.mc[task.id]||''; // '' | 'correct' | 'wrong:X'
+ var mcHtml='';
+ if(task.mc){
+  var opts=task.mc.opts.map(function(opt,i){
+   var key=['A','B','C','D'][i];
+   var cls='mc-opt';
+   var dis='';
+   if(mcState==='correct'&&task.mc.cor===key){cls='mc-opt correct';dis='disabled';}
+   else if(mcState==='correct'){cls='mc-opt correct';dis='disabled';}
+   else if(mcState==='wrong:'+key){cls='mc-opt wrong';dis='disabled';}
+   else if(mcState.indexOf('wrong')===0&&task.mc.cor===key){cls='mc-opt correct';dis='disabled';}
+   else if(mcState.indexOf('wrong')===0){cls='mc-opt neutral';dis='disabled';}
+   // Show correct when wrong was given – only reveal after attempt
+   if(mcState.indexOf('wrong')===0&&task.mc.cor===key)cls='mc-opt correct';
+   return'<button class="'+cls+'" '+dis+' onclick="answerMC(\''+task.id+'\',\''+key+'\')">'+e(opt)+'</button>';
+  }).join('');
+  var fb='';
+  if(mcState==='correct')fb='<div class="mc-fb correct">✓ Richtig!</div>';
+  else if(mcState.indexOf('wrong')===0)fb='<div class="mc-fb wrong">✗ Falsch – die richtige Antwort ist markiert.</div>';
+  mcHtml='<div class="mc-box"><div class="mc-q">❓ '+e(task.mc.q)+'</div><div class="mc-opts">'+opts+'</div>'+fb+'</div>';
+ }
+ return'<div class="tc" id="tc-'+task.id+'" style="'+(done?'border-color:'+c.border+';background:'+c.light:'')+'"><div class="tc-inner">'
+  +'<div class="tc-row">'
+  +'<div class="chk" id="chk-'+task.id+'" onclick="togDone(\''+task.id+'\')" style="border-color:'+(done?c.color:'#d1d5db')+';background:'+(done?c.color:'#fff')+'">'
+  +'<span class="chk-mark" style="display:'+(done?'block':'none')+'">✓</span></div>'
+  +'<div style="flex:1"><div style="margin-bottom:4px">'
+  +'<span class="tn" style="color:'+c.color+'">Aufgabe '+task.n+'</span>'
+  +'<span class="tbadge" style="'+(task.p?'color:'+c.color+';background:'+c.light+';border-color:'+c.border:'color:#64748b;background:#f1f5f9;border-color:#e2e8f0')+'">'+(task.p?'Pflicht':'Zusatz')+'</span></div>'
+  +'<p class="tt">'+e(task.t)+'</p>'
+  +mcHtml
+  +'<div class="t-btns">'
+  +'<button class="btn-hint'+(sh?' open':'')+'" id="bh-'+task.id+'" onclick="togHint(\''+task.id+'\')">💡 '+(sh?'Tipp ausblenden':'Tipp anzeigen')+'</button>'
+  +'<button class="btn-sol'+(ss?' open':'')+'" id="bs-'+task.id+'" onclick="togSol(\''+task.id+'\')">🔍 '+(ss?'Lösung ausblenden':'Selbstkontrolle')+'</button>'
+  +'</div></div></div>'
+  +'<div class="hint-box'+(sh?' open':'')+'" id="hbox-'+task.id+'">💡 <strong>Tipp:</strong> '+e(task.h)+'</div>'
+  +'<div class="sol-box'+(ss?' open':'')+'" id="sbox-'+task.id+'">🔍 <strong>Musterlösung:</strong> '+e(task.s)+'</div>'
+  +'</div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER STATION
+// ═══════════════════════════════════════════════════════════════════
+function renderStation(st){
+ var c=LV[S.level],lv=S.level;
+ var p=stProg(st.id),allD=(p.done===p.total&&p.total>0);
+ var videoHtml=st.videos.map(function(v){
+  return'<div class="video-card"><div class="video-thumb">▶️</div>'
+   +'<div class="video-info"><div class="video-title">'+e(v.title)+'</div><div class="video-sub">'+e(v.sub)+'</div></div>'
+   +'<a href="'+e(v.url)+'" target="_blank" class="video-btn">▶ Video öffnen</a></div>';
+ }).join('');
+ return'<div class="sh">'
+  +'<div class="sh-emoji">'+st.emoji+'</div>'
+  +'<h2 class="sh-title">Station '+(st.id+1)+': '+e(st.title)+'</h2>'
+  +'<p class="sh-sub">'+e(st.sub)+'</p>'
+  +(allD?'<div class="done-badge">✅ Station abgeschlossen!</div>':'')
+  +'</div><div class="sb">'
+  +'<div class="info-box alt-box"><div class="bt">🌍 Alltagsbezug</div><p>'+e(st.alt)+'</p></div>'
+  +videoHtml
+  +'<div class="info-box lz-box" style="background:'+c.light+';border-color:'+c.border+'">'
+  +'<div class="bt" style="color:'+c.color+'">🎯 Mein Lernziel – '+c.stars+' '+e(c.label)+'</div>'
+  +'<p style="color:'+c.dark+';font-size:13px">'+e(st.lz[lv])+'</p></div>'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px">'
+  +'<h3 style="font-size:15px;font-weight:800;color:#1e3a5f;margin:0">📝 Aufgaben – '+c.stars+' '+e(c.label)+'</h3>'
+  +'<span style="font-size:13px;color:#64748b">'+p.done+'/'+p.total+' erledigt</span></div>'
+  +st.tasks[lv].map(renderTask).join('')
+  +(allD&&st.id===ST.length-1?'<div class="completion-box"><div style="font-size:36px;margin-bottom:8px">🎉</div><div style="font-size:18px;font-weight:900;color:#15803d">Alle Stationen abgeschlossen!</div><p style="font-size:14px;color:#166534;margin-top:6px">Sehr gut gemacht – du hast den Lernpfad Radioaktivität fertig.</p></div>':'')
+  +'<div class="nav-btns">'
+  +'<button class="btn-nav" onclick="prevSt()"'+(st.id===0?' disabled':'')+'">← Zurück</button>'
+  +(st.id<ST.length-1?'<button class="btn-navp" onclick="nextSt()">Nächste Station →</button>':'<button class="btn-navp" style="background:#15803d" onclick="resetAll()">🔄 Neu starten</button>')
+  +'</div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER LEARN
+// ═══════════════════════════════════════════════════════════════════
+function renderLearn(){
+ var c=LV[S.level],tp=totProg();
+ return'<div id="topbar"><div class="tb-inner">'
+  +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+  +'<span style="font-size:18px">⚛️</span><span style="font-weight:700;font-size:14px">'+e(S.name)+'</span>'
+  +'<span class="lvl-badge" style="background:'+c.color+'">'+c.stars+' '+e(c.label)+'</span></div>'
+  +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+  +'<span id="pb-txt" style="font-size:13px;opacity:.85">'+tp.done+'/'+tp.total+' ('+tp.pct+'%)</span>'
+  +'<div class="pb-wrap"><div class="pb-fill" id="pb-fill" style="width:'+tp.pct+'%;background:'+c.color+'"></div></div>'
+  +'</div></div></div>'
+  +'<div id="st-tabs">'
+  +ST.map(function(st,i){var p=stProg(i),active=(i===S.stIdx),allD=(p.done===p.total&&p.total>0);return'<button class="tab'+(active?' active':allD?' all-done':'')+'" onclick="goStation('+i+')">'+(allD?'✅':st.emoji)+' '+e(st.title)+' <span style="opacity:.7;font-size:10px">'+p.done+'/'+p.total+'</span></button>';}).join('')
+  +'</div><div class="main">'
+  +ST.map(function(st,i){return'<div class="sc'+(i===S.stIdx?' active':'')+'" id="sc-'+i+'">'+renderStation(st)+'</div>';}).join('')
+  +'<p class="footer">💡 Pflicht-Aufgaben für alle verbindlich &nbsp;·&nbsp; Zusatz-Aufgaben freiwillig &nbsp;·&nbsp; Tipps und Lösungen zur Selbstkontrolle</p></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// AKTIONEN
+// ═══════════════════════════════════════════════════════════════════
+function render(){var app=document.getElementById('app');app.innerHTML=S.level?renderLearn():renderIntro();}
+
+function pickLevel(k){
+ _pickedLevel=k;
+ Object.keys(LV).forEach(function(j){
+  var c=LV[j],sel=(j===k);
+  var lo=document.getElementById('lo-'+j),lr=document.getElementById('lr-'+j),ld=document.getElementById('ld-'+j);
+  lo.style.borderColor=sel?c.color:'#e2e8f0';lo.style.background=sel?c.light:'#fafafa';
+  lr.style.borderColor=sel?c.color:'#d1d5db';lr.style.background=sel?c.color:'#fff';ld.style.display=sel?'inline':'none';
+ });checkStart();
+}
+function checkStart(){var inp=document.getElementById('inp'),btn=document.getElementById('bstart');if(inp&&btn)btn.disabled=!(inp.value.trim()&&_pickedLevel);}
+function startNew(){var inp=document.getElementById('inp');if(!inp||!inp.value.trim()||!_pickedLevel)return;S={name:inp.value.trim(),level:_pickedLevel,stIdx:0,done:{},hints:{},sols:{},mc:{}};saveLocal();render();}
+function resumeSaved(){applyState(_saved);saveLocal();render();}
+
+function goStation(i){S.stIdx=i;saveLocal();render();}
+function nextSt(){if(S.stIdx<ST.length-1){S.stIdx++;saveLocal();render();}}
+function prevSt(){if(S.stIdx>0){S.stIdx--;saveLocal();render();}}
+
+function togDone(id){
+ S.done[id]=!S.done[id];if(!S.done[id])delete S.done[id];saveLocal();
+ var c=LV[S.level],done=!!S.done[id];
+ var tc=document.getElementById('tc-'+id),chk=document.getElementById('chk-'+id);
+ if(tc){tc.style.borderColor=done?c.border:'#e2e8f0';tc.style.background=done?c.light:'#fff';}
+ if(chk){chk.style.borderColor=done?c.color:'#d1d5db';chk.style.background=done?c.color:'#fff';var m=chk.querySelector('.chk-mark');if(m)m.style.display=done?'block':'none';}
+ updateUI();
+}
+function togHint(id){
+ S.hints[id]=!S.hints[id];if(!S.hints[id])delete S.hints[id];saveLocal();
+ var open=!!S.hints[id];
+ var box=document.getElementById('hbox-'+id),btn=document.getElementById('bh-'+id);
+ if(box)box.className='hint-box'+(open?' open':'');
+ if(btn){btn.className='btn-hint'+(open?' open':'');btn.textContent=open?'💡 Tipp ausblenden':'💡 Tipp anzeigen';}
+}
+function togSol(id){
+ S.sols[id]=!S.sols[id];if(!S.sols[id])delete S.sols[id];saveLocal();
+ var open=!!S.sols[id];
+ var box=document.getElementById('sbox-'+id),btn=document.getElementById('bs-'+id);
+ if(box)box.className='sol-box'+(open?' open':'');
+ if(btn){btn.className='btn-sol'+(open?' open':'');btn.textContent=open?'🔍 Lösung ausblenden':'🔍 Selbstkontrolle';}
+}
+
+function answerMC(taskId,chosen){
+ // Find correct answer
+ var task=null;
+ for(var i=0;i<ST.length;i++){var ts=ST[i].tasks[S.level];for(var j=0;j<ts.length;j++){if(ts[j].id===taskId){task=ts[j];break;}}}
+ if(!task||!task.mc)return;
+ var prev=S.mc[taskId]||'';
+ if(prev==='correct'||prev.indexOf('wrong')===0)return; // already answered
+ if(chosen===task.mc.cor){S.mc[taskId]='correct';}
+ else{S.mc[taskId]='wrong:'+chosen;}
+ saveLocal();
+ // Re-render only the MC part of this task card
+ var tc=document.getElementById('tc-'+taskId);
+ if(tc){
+  var opts=task.mc.opts.map(function(opt,i){
+   var key=['A','B','C','D'][i];
+   var st2=S.mc[taskId];
+   var cls='mc-opt',dis='disabled';
+   if(key===task.mc.cor)cls='mc-opt correct';
+   else if(st2==='wrong:'+key)cls='mc-opt wrong';
+   else cls='mc-opt neutral';
+   return'<button class="'+cls+'" '+dis+' onclick="answerMC(\''+taskId+'\',\''+key+'\')">'+e(opt)+'</button>';
+  }).join('');
+  var fb='';
+  var st2=S.mc[taskId];
+  if(st2==='correct')fb='<div class="mc-fb correct">✓ Richtig!</div>';
+  else if(st2.indexOf('wrong')===0)fb='<div class="mc-fb wrong">✗ Falsch – die richtige Antwort ist markiert.</div>';
+  var mcBox=tc.querySelector('.mc-box');
+  if(mcBox){mcBox.innerHTML='<div class="mc-q">❓ '+e(task.mc.q)+'</div><div class="mc-opts">'+opts+'</div>'+fb;}
+ }
+}
+
+function updateUI(){
+ var tp=totProg(),c=LV[S.level];
+ var fill=document.getElementById('pb-fill'),txt=document.getElementById('pb-txt');
+ if(fill)fill.style.width=tp.pct+'%';
+ if(txt)txt.textContent=tp.done+'/'+tp.total+' ('+tp.pct+'%)';
+ ST.forEach(function(st,i){
+  var p=stProg(i),allD=(p.done===p.total&&p.total>0),active=(i===S.stIdx);
+  var tabs=document.querySelectorAll('#st-tabs .tab');
+  if(tabs[i]){tabs[i].className='tab'+(active?' active':allD?' all-done':'');tabs[i].innerHTML=(allD?'✅':st.emoji)+' '+e(st.title)+' <span style="opacity:.7;font-size:10px">'+p.done+'/'+p.total+'</span>';}
+ });
+}
+
+function resetAll(){if(confirm('Wirklich alle Fortschritte löschen und neu starten?')){localStorage.removeItem('lp_radio2');_saved=null;_pickedLevel='';S={name:'',level:'',stIdx:0,done:{},hints:{},sols:{},mc:{}};render();}}
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+loadLocal();render();
+</script>
+</body>
+</html>
